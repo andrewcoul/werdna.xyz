@@ -14,11 +14,23 @@
     .hero {
       position: relative;
     }
-    img {
+    .img-main {
       display: block;
       width: 320px;
       position: relative;
-      z-index: 1;
+      z-index: 2;
+    }
+    .shadow-clip {
+      position: absolute;
+      top: 0;
+      left: 0;
+      clip-path: inset(62% -60px -60px -60px);
+      z-index: 0;
+    }
+    .img-shadow {
+      display: block;
+      width: 320px;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4));
     }
     .divider {
       position: absolute;
@@ -29,13 +41,17 @@
       border: none;
       border-top: 5px solid black;
       margin: 0;
+      z-index: 1;
     }
   </style>
 </head>
 <body>
   <div class="hero">
-    <img src="../boy.png" alt="">
+    <div class="shadow-clip">
+      <img src="../boy.png" alt="" class="img-shadow">
+    </div>
     <hr class="divider">
+    <img src="../boy.png" alt="" class="img-main">
   </div>
 </body>
 </html>
