@@ -6,6 +6,10 @@
   box-sizing: border-box;
 }
 
+a:visited {
+  color: inherit;
+}
+
 :root {
   --fg: #1a1a1a;
   --muted: #c8c2b4;
