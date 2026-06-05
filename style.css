@@ -92,11 +92,13 @@ hr {
   font-size: 1rem;
   letter-spacing: 0.06em;
   opacity: 0.45;
-  cursor: default;
+  cursor: pointer;
   transition: opacity 0.15s;
   display: flex;
   align-items: center;
   gap: 0.35rem;
+  color: var(--fg);
+  text-decoration: none;
 }
 
 .nav-label::after {
@@ -112,9 +114,10 @@ hr {
 
 .flyout {
   position: absolute;
-  left: calc(100% + 1rem);
+  left: 100%;
   top: 0;
-  transform: translateX(-4px);
+  padding-left: 0.75rem;
+  transform: translateX(-2px);
   list-style: none;
   display: flex;
   flex-direction: column;
