@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Club</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&display=swap">
+  <style>
+    a:visited { color: inherit; }
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 3rem;
+      font-family: 'Forum', Georgia, serif;
+      color: #1a1a1a;
+    }
+    h1 {
+      font-size: clamp(1.6rem, 2.5vw, 2.25rem);
+      font-weight: 300;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-top: 1.25rem;
+    }
+    hr.section {
+      border: none;
+      border-top: 1px solid #c8c2b4;
+      margin-top: -0.4rem;
+      width: 320px;
+    }
+    .tagline {
+      font-size: 0.95rem;
+      font-style: italic;
+      color: #8b5e3c;
+      margin-top: 0.1rem;
+    }
+    h1::after {
+      content: '_';
+      color: #8b5e3c;
+      animation: blink 1.1s step-end infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+    .hero {
+      position: relative;
+    }
+    .img-main {
+      display: block;
+      width: 320px;
+      position: relative;
+      z-index: 2;
+    }
+    .shadow-clip {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    .shadow-clip img {
+      display: block;
+      width: 320px;
+      filter: drop-shadow(0 3px 5px rgba(0,0,0,0.45));
+    }
+    .shadow-clip-bottom {
+      clip-path: inset(88% -15px -15px -15px);
+    }
+    .shadow-clip-mid {
+      clip-path: inset(54% -15px 36% -15px);
+      -webkit-mask-image: linear-gradient(13deg, black 0%, transparent 100%);
+      mask-image: linear-gradient(13deg, black 0%, transparent 100%);
+    }
+    .divider {
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: none;
+      border-top: 5px solid black;
+      margin: 0;
+      z-index: 1;
+    }
+    .divider-bottom {
+      top: 100%;
+      width: 25vw;
+    }
+    .divider-mid {
+      top: 66%;
+      left: 54%;
+      width: 8.5vw;
+      transform: translate(-80%, -50%) rotate(13deg);
+      border-top-color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <div class="shadow-clip shadow-clip-bottom">
+      <img src="../dogs.png" alt="">
+    </div>
+    <div class="shadow-clip shadow-clip-mid">
+      <img src="../dogs.png" alt="">
+    </div>
+    <hr class="divider divider-mid">
+    <hr class="divider divider-bottom">
+    <a href="../index.html"><img src="../dogs.png" alt="" class="img-main"></a>
+  </div>
+  <h1>Book Club</h1>
+  <hr class="section">
+  <p class="tagline">Notes from my studies.</p>
+</body>
+</html>
