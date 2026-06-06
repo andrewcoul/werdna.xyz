@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matthew — Bible Studies</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&display=swap">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --fg: #1a1a1a;
+      --muted: #c8c2b4;
+      --accent: #8b5e3c;
+      --sidebar: 130px;
+    }
+
+    a:visited { color: inherit; }
+
+    body {
+      font-family: 'Forum', Georgia, serif;
+      color: var(--fg);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar);
+      height: 100vh;
+      overflow-y: auto;
+      border-right: 1px solid var(--muted);
+      padding: 1.75rem 0 1.75rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar .back {
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+      margin-bottom: 1.25rem;
+    }
+    .sidebar .back:hover { opacity: 1; }
+
+    .sidebar .book-title {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .sidebar a {
+      font-size: 0.82rem;
+      color: var(--fg);
+      text-decoration: none;
+      opacity: 0.3;
+      transition: opacity 0.15s, color 0.15s;
+      display: block;
+      padding: 0.15rem 0;
+    }
+    .sidebar a:hover { opacity: 0.7; }
+    .sidebar a.active { opacity: 1; color: var(--accent); }
+
+    /* ── Main ── */
+    main {
+      margin-left: var(--sidebar);
+      padding: 3rem 3rem 6rem;
+      flex: 1;
+      max-width: 1100px;
+    }
+
+    .page-title {
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-weight: 300;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.4rem;
+    }
+    .page-title::after {
+      content: '_';
+      color: var(--accent);
+      animation: blink 1.1s step-end infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    .page-subtitle {
+      font-size: 0.9rem;
+      font-style: italic;
+      color: var(--accent);
+      margin-bottom: 3rem;
+    }
+
+    /* ── Chapter sections ── */
+    .chapter {
+      margin-bottom: 4rem;
+      scroll-margin-top: 2rem;
+    }
+
+    .chapter-heading {
+      font-size: 1.4rem;
+      letter-spacing: 0.04em;
+      color: var(--fg);
+      margin-bottom: 0.4rem;
+    }
+
+    .chapter > hr {
+      border: none;
+      border-top: 1px solid var(--muted);
+      margin-bottom: 0;
+    }
+
+    /* ── Two-column grid ── */
+    .verse-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--muted);
+      border-top: none;
+    }
+
+    .col-head {
+      font-size: 0.63rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0.45rem 1rem;
+      border-top: 1px solid var(--muted);
+      border-bottom: 1px solid var(--muted);
+    }
+    .col-head:first-child { border-right: 1px solid var(--muted); }
+
+    .text-col,
+    .note-col {
+      padding: 0.85rem 1rem;
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+    .text-col { border-right: 1px solid var(--muted); }
+    .note-col { color: #5c5248; font-style: italic; }
+
+    .verse-block {
+      display: flex;
+      gap: 1em;
+      margin-bottom: 1.25rem;
+    }
+    .verse-block:last-child { margin-bottom: 0; }
+
+    .verse-ref {
+      flex-shrink: 0;
+      font-size: 1.05rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    /* ── Chapter visibility ── */
+    .chapter { display: none; }
+    .chapter.active { display: block; }
+
+    /* ── Responsive ── */
+    @media (max-width: 700px) {
+      .sidebar { display: none; }
+      main { margin-left: 0; padding: 2rem 1.25rem 4rem; }
+      .verse-grid { grid-template-columns: 1fr; }
+      .col-head:first-child { border-right: none; }
+      .text-col { border-right: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <a href="index.html" class="back">← Studies</a>
+  <span class="book-title">Matthew</span>
+  <ul>
+    <li><a href="#ch-1">Ch. 1</a></li>
+    <li><a href="#ch-2">Ch. 2</a></li>
+    <li><a href="#ch-3">Ch. 3</a></li>
+    <li><a href="#ch-4">Ch. 4</a></li>
+    <li><a href="#ch-5">Ch. 5</a></li>
+    <li><a href="#ch-6">Ch. 6</a></li>
+    <li><a href="#ch-7">Ch. 7</a></li>
+    <li><a href="#ch-8">Ch. 8</a></li>
+    <li><a href="#ch-9">Ch. 9</a></li>
+    <li><a href="#ch-10">Ch. 10</a></li>
+    <li><a href="#ch-11">Ch. 11</a></li>
+    <li><a href="#ch-12">Ch. 12</a></li>
+    <li><a href="#ch-13">Ch. 13</a></li>
+    <li><a href="#ch-14">Ch. 14</a></li>
+    <li><a href="#ch-15">Ch. 15</a></li>
+    <li><a href="#ch-16">Ch. 16</a></li>
+    <li><a href="#ch-17">Ch. 17</a></li>
+    <li><a href="#ch-18">Ch. 18</a></li>
+    <li><a href="#ch-19">Ch. 19</a></li>
+    <li><a href="#ch-20">Ch. 20</a></li>
+    <li><a href="#ch-21">Ch. 21</a></li>
+    <li><a href="#ch-22">Ch. 22</a></li>
+    <li><a href="#ch-23">Ch. 23</a></li>
+    <li><a href="#ch-24">Ch. 24</a></li>
+    <li><a href="#ch-25">Ch. 25</a></li>
+    <li><a href="#ch-26">Ch. 26</a></li>
+    <li><a href="#ch-27">Ch. 27</a></li>
+    <li><a href="#ch-28">Ch. 28</a></li>
+  </ul>
+</nav>
+
+<main>
+  <h1 class="page-title">Matthew</h1>
+  <p class="page-subtitle">Study notes.</p>
+
+  <section id="ch-1" class="chapter">
+    <h2 class="chapter-heading">Chapter 1</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-2" class="chapter">
+    <h2 class="chapter-heading">Chapter 2</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-3" class="chapter">
+    <h2 class="chapter-heading">Chapter 3</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-4" class="chapter">
+    <h2 class="chapter-heading">Chapter 4</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-5" class="chapter">
+    <h2 class="chapter-heading">Chapter 5</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-6" class="chapter">
+    <h2 class="chapter-heading">Chapter 6</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-7" class="chapter">
+    <h2 class="chapter-heading">Chapter 7</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-8" class="chapter">
+    <h2 class="chapter-heading">Chapter 8</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-9" class="chapter">
+    <h2 class="chapter-heading">Chapter 9</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-10" class="chapter">
+    <h2 class="chapter-heading">Chapter 10</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-11" class="chapter">
+    <h2 class="chapter-heading">Chapter 11</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-12" class="chapter">
+    <h2 class="chapter-heading">Chapter 12</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-13" class="chapter">
+    <h2 class="chapter-heading">Chapter 13</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-14" class="chapter">
+    <h2 class="chapter-heading">Chapter 14</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-15" class="chapter">
+    <h2 class="chapter-heading">Chapter 15</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-16" class="chapter">
+    <h2 class="chapter-heading">Chapter 16</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-17" class="chapter">
+    <h2 class="chapter-heading">Chapter 17</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-18" class="chapter">
+    <h2 class="chapter-heading">Chapter 18</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-19" class="chapter">
+    <h2 class="chapter-heading">Chapter 19</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-20" class="chapter">
+    <h2 class="chapter-heading">Chapter 20</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-21" class="chapter">
+    <h2 class="chapter-heading">Chapter 21</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-22" class="chapter">
+    <h2 class="chapter-heading">Chapter 22</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-23" class="chapter">
+    <h2 class="chapter-heading">Chapter 23</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-24" class="chapter">
+    <h2 class="chapter-heading">Chapter 24</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-25" class="chapter">
+    <h2 class="chapter-heading">Chapter 25</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-26" class="chapter">
+    <h2 class="chapter-heading">Chapter 26</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-27" class="chapter">
+    <h2 class="chapter-heading">Chapter 27</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="ch-28" class="chapter">
+    <h2 class="chapter-heading">Chapter 28</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+</main>
+
+<script>
+  // ── Data ──────────────────────────────────────────────────────────────────
+  let bookData = null;
+
+  async function loadBook() {
+    if (bookData) return bookData;
+    const res = await fetch('./data/matthew.json');
+    bookData = await res.json();
+    return bookData;
+  }
+
+  async function fetchChapter(chNum) {
+    const data    = await loadBook();
+    const chapter = data.chapters.find(c => c.chapter === chNum);
+    return chapter.verses.map(v => ({
+      ref:  `${v.verse}`,
+      text: v.text,
+    }));
+  }
+
+  function buildGrid(section, verses) {
+    const textCol = section.querySelector('.text-col');
+    verses.forEach(({ ref, text }) => {
+      const block = document.createElement('div');
+      block.className = 'verse-block';
+      block.innerHTML = `<span class="verse-ref">${ref}</span>${text}`;
+      textCol.appendChild(block);
+    });
+  }
+
+  // ── Chapter switching ─────────────────────────────────────────────────────
+  const links    = document.querySelectorAll('.sidebar a[href^="#"]');
+  const sections = document.querySelectorAll('.chapter');
+
+  async function showChapter(id) {
+    sections.forEach(s => s.classList.toggle('active', s.id === id));
+    links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === `#${id}`));
+    history.replaceState(null, '', `#${id}`);
+
+    const section = document.getElementById(id);
+    const grid    = section.querySelector('.verse-grid');
+    if (grid.querySelector('.verse-row')) return;
+
+    const chNum = parseInt(id.replace('ch-', ''), 10);
+
+    const loadingEl = document.createElement('div');
+    loadingEl.style.cssText = 'grid-column:1/-1;padding:0.85rem 1rem;font-size:0.82rem;font-style:italic;color:var(--muted);';
+    loadingEl.textContent = 'Loading…';
+    grid.appendChild(loadingEl);
+
+    try {
+      const verses = await fetchChapter(chNum);
+      loadingEl.remove();
+      buildGrid(section, verses);
+    } catch (err) {
+      loadingEl.textContent = 'Could not load verses.';
+    }
+  }
+
+  links.forEach(l => {
+    l.addEventListener('click', e => {
+      e.preventDefault();
+      showChapter(l.getAttribute('href').slice(1));
+    });
+  });
+
+  const initial = location.hash.slice(1);
+  showChapter(document.getElementById(initial) ? initial : 'ch-1');
+</script>
+
+</body>
+</html>
