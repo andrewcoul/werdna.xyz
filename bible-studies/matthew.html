@@ -9,6 +9,7 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     * { cursor: none !important; }
     #cursor { position: fixed; width: 16px; height: 16px; background: rgba(0,0,0,0.4); border-radius: 50%; pointer-events: none; transform: translate(-50%,-50%); z-index: 9999; }
+    @media (pointer: coarse) { #cursor { display: none; } * { cursor: auto !important; } }
 
     :root {
       --fg: #1a1a1a;

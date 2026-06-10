@@ -8,6 +8,11 @@
 
 * { cursor: none !important; }
 
+@media (pointer: coarse) {
+  #cursor { display: none; }
+  * { cursor: auto !important; }
+}
+
 #cursor {
   position: fixed;
   width: 16px;
