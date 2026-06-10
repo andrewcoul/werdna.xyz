@@ -2,8 +2,10 @@
 (function () {
   const dot = document.createElement('div');
   dot.id = 'cursor';
+  dot.style.opacity = '0';
   document.body.appendChild(dot);
   document.addEventListener('mousemove', e => {
+    dot.style.opacity = '1';
     dot.style.left = e.clientX + 'px';
     dot.style.top = e.clientY + 'px';
   });
