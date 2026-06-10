@@ -1,3 +1,22 @@
+// Custom dot cursor
+(function () {
+  const dot = document.createElement('div');
+  dot.id = 'cursor';
+  document.body.appendChild(dot);
+  document.addEventListener('mousemove', e => {
+    dot.style.left = e.clientX + 'px';
+    dot.style.top = e.clientY + 'px';
+  });
+})();
+
+// Random dark pastel background color
+(function () {
+  const h = Math.floor(Math.random() * 360);
+  const s = 45 + Math.floor(Math.random() * 20);
+  const l = 38 + Math.floor(Math.random() * 15);
+  document.documentElement.style.setProperty('--bg', `hsl(${h},${s}%,${l}%)`);
+})();
+
 // Active nav indicator
 document.querySelectorAll('.nav-label').forEach(link => {
   if (link.href === location.href) {

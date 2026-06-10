@@ -7,12 +7,15 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&display=swap">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    * { cursor: none !important; }
+    #cursor { position: fixed; width: 16px; height: 16px; background: rgba(0,0,0,0.4); border-radius: 50%; pointer-events: none; transform: translate(-50%,-50%); z-index: 9999; }
 
     :root {
       --fg: #1a1a1a;
       --muted: #c8c2b4;
       --accent: #8b5e3c;
       --sidebar: 260px;
+      --bg: #c87840;
     }
 
     a:visited { color: inherit; }
@@ -33,7 +36,7 @@
       width: var(--sidebar);
       height: 100vh;
       overflow-y: auto;
-      background: #c87840;
+      background: var(--bg);
       border-right: 2px solid #000;
       padding: 3rem;
       display: flex;
