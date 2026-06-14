@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Matthew — Bible Studies</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Domine:wght@400;700&display=swap">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     * { cursor: none !important; }
@@ -22,7 +22,7 @@
     a:visited { color: inherit; }
 
     body {
-      font-family: 'Forum', Georgia, serif;
+      font-family: 'Domine', Georgia, serif;
       background: #fff;
       color: #1a1a1a;
       min-height: 100vh;
@@ -55,14 +55,6 @@
       margin-bottom: 1.25rem;
     }
     .sidebar .back:hover { opacity: 1; }
-
-    .sidebar .book-title {
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.6);
-      margin-bottom: 0.75rem;
-    }
 
     .sidebar ul {
       list-style: none;
@@ -99,7 +91,7 @@
       margin-left: var(--sidebar);
       padding: 3rem 3rem 6rem;
       flex: 1;
-      max-width: 1100px;
+      max-width: 800px;
     }
 
     .page-title {
@@ -107,12 +99,6 @@
       font-weight: 700;
       letter-spacing: -0.03em;
       margin-bottom: 0.4rem;
-    }
-    .page-subtitle {
-      font-size: 0.9rem;
-      font-style: italic;
-      color: var(--accent);
-      margin-bottom: 0.75rem;
     }
 
     .resources-link,
@@ -143,76 +129,56 @@
       margin-bottom: 0;
     }
 
-    /* ── Two-column grid ── */
-    .verse-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      border: 1px solid var(--muted);
-      border-top: none;
-    }
-
-    .col-head {
-      font-size: 0.63rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      padding: 0.45rem 1rem;
-      border-top: 1px solid var(--muted);
-      border-bottom: 1px solid var(--muted);
-    }
-    .col-head:first-child { border-right: 1px solid var(--muted); }
-
-    .text-col,
-    .note-col {
-      padding: 1.5rem 1rem;
+    /* ── Verse body ── */
+    .verse-body {
+      padding: 1.5rem 0;
       font-size: 1.05rem;
       line-height: 1.8;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
     }
-    .text-col { border-right: 1px solid var(--muted); }
-    .note-col { }
-    .note-col ul { padding-left: 2rem; }
-    .note-col ul li { margin-bottom: 1rem; }
-    .note-col ul li:nth-child(2) { color: #a33; }
 
-    .preface {
-      padding: 1.5rem 1rem;
-      font-size: 1.05rem;
-      line-height: 1.8;
-    }
-    .preface-heading {
-      font-size: 0.63rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.75rem;
-    }
-    .preface ul { padding-left: 2rem; }
-    .preface ul li { margin-bottom: 1rem; }
-    .red { color: #a33; }
-    .blue { color: #5f8ec0; }
-    .green { color: #5a9d6e; }
-    .orange { color: #d4944f; }
-    .note-col ul li:nth-child(3) { color: #7ba8d4; }
-    .note-col ul li:nth-child(4) { color: #5a9d6e; }
-    .note-col ul li:nth-child(5) { color: #5a9d6e; }
-    .note-col ul li:nth-child(6) { color: #5a9d6e; }
-    .note-col ul li:nth-child(7) { color: #d4944f; }
-    .note-col ul li:last-child { color: #d4944f; }
-
-    .verse-block {
+    /* ── Per-verse entry (matches patristic sidebar style) ── */
+    .verse-entry {
       display: flex;
       gap: 1em;
-      margin-bottom: 1.25rem;
+      align-items: flex-start;
     }
-    .verse-block:last-child { margin-bottom: 0; }
 
     .verse-ref {
       flex-shrink: 0;
-      font-size: 1.05rem;
+      min-width: 2em;
+      text-align: right;
       letter-spacing: 0.1em;
+      line-height: 1.8;
       color: var(--accent);
-      font-style: normal;
     }
+
+    .verse-content {
+      flex: 1;
+    }
+
+    .verse-text {
+      display: block;
+      border-left: 3px solid var(--accent);
+      padding-left: 1.25rem;
+      line-height: 1.8;
+    }
+
+    .verse-notes {
+      margin-top: 0.6rem;
+      padding-left: 2.5rem;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #555;
+    }
+    .verse-notes ul {
+      list-style: disc;
+      padding-left: 1.25rem;
+    }
+    .verse-notes ul li { margin-bottom: 0.75rem; }
+    .verse-notes ul li:last-child { margin-bottom: 0; }
 
     /* ── Hamburger ── */
     .hamburger {
@@ -261,13 +227,6 @@
       .sidebar.open { transform: translateX(0); }
       .hamburger { display: flex; }
       main { margin-left: 0; padding: 4rem 1.25rem 4rem; }
-      .verse-grid { grid-template-columns: 1fr; }
-      .col-head:first-child { border-right: none; }
-      .text-col { border-right: none; }
-      .verse-grid .col-head:nth-child(1) { order: 1; }
-      .verse-grid .text-col { order: 2; }
-      .verse-grid .col-head:nth-child(2) { order: 3; }
-      .verse-grid .note-col { order: 4; }
     }
   </style>
 </head>
@@ -314,335 +273,202 @@
   <section id="ch-1" class="chapter">
     <h2 class="chapter-heading">Chapter 1</h2>
     <hr>
-    <div class="preface">
-      <p class="preface-heading">Preface</p>
-      <ul>
-        <li>*this commentary assumes the Two-Document hypothesis*</li>
-        <li>*this commentary is based on the Sacra Pagina commentary of the Gospel of Matthew by Daniel J. Harrington, S.J. as well as the patristic sources mentioned within.</li>
-        <li>Matthew was written in the context of the destruction of the second temple (circa 70 AD) by a Christian evangelist somewhere in Palestine or Syria using sources from Mark's gospel, a collection of sayings called Q, and some special material called M.</li>
-        <li>Matthew is a Jewish text in its conceptual and rhetorical assumptions, in its sociological setting, and its theological message.</li>
-        <li>The greek language of Matthew is described as being a deliberate improvement over its sources to the level of the Septuagint.</li>
-        <li>Matthew is bookended with promises of God's presence with us. Namely in 1:23 with his name given as emmanuel and in 28:20 when it was promised that he would be with his disciples "until the end of the age"</li>
-      </ul>
-    </div>
-    <div class="verse-grid" data-red-verses="3" data-blue-verses="16" data-green-verses="19" data-orange-verses="23,24,25">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col">
-        <ul>
-          <li>The point of the birth-record is to tie Jesus to the royal line of Israel (David) and to trace his ancestry back to Israel's principal ancestor (Abraham). It is important to Christians that the Messiah can be called the "Son of David" and the idea that he came at the "right" time is suggested by the threefold sequence of 14 generations. From Abraham to David, from David to the exile, and the exile to Jesus.</li>
-          <li>Tamar is the first woman given in the otherise mostly patriarchal birth-record. Jesus' lineage is attached to Abraham through Perez.</li>
-          <li>According to Luke 3:23 the father of St. Joseph was named Eli.</li>
-          <li>The Greek term dikaios should be interpreted in reference to Joseph's observance of the law and not in reference to kindliness or niceness.</li>
-          <li>The particular law in question can either be tied to Deuteronomy 22:23-27 concerning a betrothed woman found not to be a virgin, or a vow of binding/denial detailed in Numbers 30. </li>
-          <li>From Jerome's commentary on Matthew: He who is joined to a prostitute “becomes one body with her.” There is also a precept in the law that not only the accused but also the confidants of evil deeds are guilty of sin. If this is so, why is Joseph recorded to be just, when he is concealing the crime of his wife? This is a testimony to Mary that Joseph, knowing her chastity and perplexed by what had taken place, conceals in silence the mystery that he did not know about.</li>
-          <li>I believe the above point is reinforced by verses 24 and 25. Mary and Joseph's decision not to consummate their marraige upon the nisuim is very unorthodox and I believe it lends creedence to the idea that Mary had taken some kind of binding vow related to sexual chastity, and that the  legalistic nature of Joseph's impulse to terminate the marraige is related to Numbers 30 rather than Deuteronomy 23.</li>
-          <li>Verse 25 neither confirms nor denies the perpetual virginity of Mary. "Unitl" contains no implication about what happened after Jesus' conception and birth. From Jerome's commentary on Matthew: "It does not, however, follow from the words “before they came together” that they did come together afterwards; rather, the Scripture is simply pointing out what did not happen."</li>
-        </ul>
-      </div>
+    <div class="verse-body">
+      <!-- Hidden per-verse note data — JS places these under the matching verse -->
+      <div class="verse-note-data" data-verse="1" style="display:none"><ul>
+        <li>The point of the birth-record is to tie Jesus to the royal line of Israel (David) and to trace his ancestry back to Israel's principal ancestor (Abraham). It is important to Christians that the Messiah can be called the "Son of David" and the idea that he came at the "right" time is suggested by the threefold sequence of 14 generations. From Abraham to David, from David to the exile, and the exile to Jesus.</li>
+      </ul></div>
+      <div class="verse-note-data" data-verse="3" style="display:none"><ul>
+        <li>Tamar is the first woman given in the otherwise mostly patriarchal birth-record. Jesus' lineage is attached to Abraham through Perez.</li>
+      </ul></div>
+      <div class="verse-note-data" data-verse="16" style="display:none"><ul>
+        <li>According to Luke 3:23 the father of St. Joseph was named Eli.</li>
+      </ul></div>
+      <div class="verse-note-data" data-verse="19" style="display:none"><ul>
+        <li>The Greek term dikaios should be interpreted in reference to Joseph's observance of the law and not in reference to kindliness or niceness.</li>
+        <li>The particular law in question can either be tied to Deuteronomy 22:23-27 concerning a betrothed woman found not to be a virgin, or a vow of binding/denial detailed in Numbers 30.</li>
+        <li>From Jerome's commentary on Matthew: He who is joined to a prostitute "becomes one body with her." There is also a precept in the law that not only the accused but also the confidants of evil deeds are guilty of sin. If this is so, why is Joseph recorded to be just, when he is concealing the crime of his wife? This is a testimony to Mary that Joseph, knowing her chastity and perplexed by what had taken place, conceals in silence the mystery that he did not know about.</li>
+      </ul></div>
+      <div class="verse-note-data" data-verse="24" style="display:none"><ul>
+        <li>I believe the above point is reinforced by verses 24 and 25. Mary and Joseph's decision not to consummate their marraige upon the nisuim is very unorthodox and I believe it lends creedence to the idea that Mary had taken some kind of binding vow related to sexual chastity, and that the legalistic nature of Joseph's impulse to terminate the marraige is related to Numbers 30 rather than Deuteronomy 23.</li>
+      </ul></div>
+      <div class="verse-note-data" data-verse="25" style="display:none"><ul>
+        <li>Verse 25 neither confirms nor denies the perpetual virginity of Mary. "Until" contains no implication about what happened after Jesus' conception and birth. From Jerome's commentary on Matthew: "It does not, however, follow from the words 'before they came together' that they did come together afterwards; rather, the Scripture is simply pointing out what did not happen."</li>
+      </ul></div>
     </div>
   </section>
 
   <section id="ch-2" class="chapter">
     <h2 class="chapter-heading">Chapter 2</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-3" class="chapter">
     <h2 class="chapter-heading">Chapter 3</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-4" class="chapter">
     <h2 class="chapter-heading">Chapter 4</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-5" class="chapter">
     <h2 class="chapter-heading">Chapter 5</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-6" class="chapter">
     <h2 class="chapter-heading">Chapter 6</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-7" class="chapter">
     <h2 class="chapter-heading">Chapter 7</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-8" class="chapter">
     <h2 class="chapter-heading">Chapter 8</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-9" class="chapter">
     <h2 class="chapter-heading">Chapter 9</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-10" class="chapter">
     <h2 class="chapter-heading">Chapter 10</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-11" class="chapter">
     <h2 class="chapter-heading">Chapter 11</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-12" class="chapter">
     <h2 class="chapter-heading">Chapter 12</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-13" class="chapter">
     <h2 class="chapter-heading">Chapter 13</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-14" class="chapter">
     <h2 class="chapter-heading">Chapter 14</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-15" class="chapter">
     <h2 class="chapter-heading">Chapter 15</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-16" class="chapter">
     <h2 class="chapter-heading">Chapter 16</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-17" class="chapter">
     <h2 class="chapter-heading">Chapter 17</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-18" class="chapter">
     <h2 class="chapter-heading">Chapter 18</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-19" class="chapter">
     <h2 class="chapter-heading">Chapter 19</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-20" class="chapter">
     <h2 class="chapter-heading">Chapter 20</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-21" class="chapter">
     <h2 class="chapter-heading">Chapter 21</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-22" class="chapter">
     <h2 class="chapter-heading">Chapter 22</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-23" class="chapter">
     <h2 class="chapter-heading">Chapter 23</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-24" class="chapter">
     <h2 class="chapter-heading">Chapter 24</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-25" class="chapter">
     <h2 class="chapter-heading">Chapter 25</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-26" class="chapter">
     <h2 class="chapter-heading">Chapter 26</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-27" class="chapter">
     <h2 class="chapter-heading">Chapter 27</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="ch-28" class="chapter">
     <h2 class="chapter-heading">Chapter 28</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 </main>
 
 <script>
+  // ── Cursor ────────────────────────────────────────────────────────────────
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+  });
+
   // ── Data ──────────────────────────────────────────────────────────────────
   let bookData = null;
 
@@ -656,29 +482,44 @@
   async function fetchChapter(chNum) {
     const data    = await loadBook();
     const chapter = data.chapters.find(c => c.chapter === chNum);
-    return chapter.verses.map(v => ({
-      ref:  `${v.verse}`,
-      text: v.text,
-    }));
+    return chapter.verses.map(v => ({ ref: `${v.verse}`, text: v.text }));
   }
 
-  function buildGrid(section, verses) {
-    const textCol = section.querySelector('.text-col');
-    const grid = section.querySelector('.verse-grid');
-    const redVerses = new Set((grid.dataset.redVerses || '').split(',').map(s => s.trim()).filter(Boolean));
-    const blueVerses = new Set((grid.dataset.blueVerses || '').split(',').map(s => s.trim()).filter(Boolean));
-    const greenVerses = new Set((grid.dataset.greenVerses || '').split(',').map(s => s.trim()).filter(Boolean));
-    const orangeVerses = new Set((grid.dataset.orangeVerses || '').split(',').map(s => s.trim()).filter(Boolean));
+  function buildVerseBody(section, verses) {
+    const verseBody = section.querySelector('.verse-body');
+
+    // Collect per-verse note HTML keyed by verse number
+    const notesMap = {};
+    verseBody.querySelectorAll('.verse-note-data[data-verse]').forEach(el => {
+      notesMap[el.dataset.verse] = el.innerHTML;
+    });
+
     verses.forEach(({ ref, text }) => {
-      const block = document.createElement('div');
-      let className = 'verse-block';
-      if (redVerses.has(ref)) className += ' red';
-      if (blueVerses.has(ref)) className += ' blue';
-      if (greenVerses.has(ref)) className += ' green';
-      if (orangeVerses.has(ref)) className += ' orange';
-      block.className = className;
-      block.innerHTML = `<span class="verse-ref">${ref}</span>${text}`;
-      textCol.appendChild(block);
+      const entry = document.createElement('div');
+      entry.className = 'verse-entry';
+
+      const refEl = document.createElement('span');
+      refEl.className = 'verse-ref';
+      refEl.textContent = ref;
+      entry.appendChild(refEl);
+
+      const content = document.createElement('div');
+      content.className = 'verse-content';
+
+      const textEl = document.createElement('span');
+      textEl.className = 'verse-text';
+      textEl.innerHTML = text;
+      content.appendChild(textEl);
+
+      if (notesMap[ref]) {
+        const notes = document.createElement('div');
+        notes.className = 'verse-notes';
+        notes.innerHTML = notesMap[ref];
+        content.appendChild(notes);
+      }
+
+      entry.appendChild(content);
+      verseBody.appendChild(entry);
     });
   }
 
@@ -691,21 +532,21 @@
     links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === `#${id}`));
     history.replaceState(null, '', `#${id}`);
 
-    const section = document.getElementById(id);
-    const grid    = section.querySelector('.verse-grid');
-    if (grid.querySelector('.verse-row')) return;
+    const section   = document.getElementById(id);
+    const verseBody = section.querySelector('.verse-body');
+    if (verseBody.querySelector('.verse-entry')) return;
 
     const chNum = parseInt(id.replace('ch-', ''), 10);
 
     const loadingEl = document.createElement('div');
-    loadingEl.style.cssText = 'grid-column:1/-1;padding:0.85rem 1rem;font-size:0.82rem;font-style:italic;color:var(--muted);';
+    loadingEl.style.cssText = 'padding:0.85rem 0;font-size:0.82rem;font-style:italic;color:var(--muted);';
     loadingEl.textContent = 'Loading…';
-    grid.appendChild(loadingEl);
+    verseBody.appendChild(loadingEl);
 
     try {
       const verses = await fetchChapter(chNum);
       loadingEl.remove();
-      buildGrid(section, verses);
+      buildVerseBody(section, verses);
     } catch (err) {
       loadingEl.textContent = 'Could not load verses.';
     }

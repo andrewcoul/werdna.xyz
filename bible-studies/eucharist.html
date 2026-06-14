@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Eucharist — Bible Studies</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Domine:wght@400;700&display=swap">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     * { cursor: none !important; }
@@ -22,7 +22,7 @@
     a:visited { color: inherit; }
 
     body {
-      font-family: 'Forum', Georgia, serif;
+      font-family: 'Domine', Georgia, serif;
       background: #fff;
       color: #1a1a1a;
       min-height: 100vh;
@@ -55,14 +55,6 @@
       margin-bottom: 1.25rem;
     }
     .sidebar .back:hover { opacity: 1; }
-
-    .sidebar .book-title {
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.6);
-      margin-bottom: 0.75rem;
-    }
 
     .sidebar ul {
       list-style: none;
@@ -99,7 +91,7 @@
       margin-left: var(--sidebar);
       padding: 3rem 3rem 6rem;
       flex: 1;
-      max-width: 1100px;
+      max-width: 800px;
     }
 
     .page-title {
@@ -107,12 +99,6 @@
       font-weight: 700;
       letter-spacing: -0.03em;
       margin-bottom: 0.4rem;
-    }
-    .page-subtitle {
-      font-size: 0.9rem;
-      font-style: italic;
-      color: var(--accent);
-      margin-bottom: 0.75rem;
     }
 
     .resources-link,
@@ -143,64 +129,64 @@
       margin-bottom: 0;
     }
 
-    /* ── Three-column grid ── */
-    .verse-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 0.5fr;
-      border: 1px solid var(--muted);
-      border-top: none;
-    }
-
-    .col-head {
-      font-size: 0.63rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      padding: 0.45rem 1rem;
-      border-top: 1px solid var(--muted);
-      border-bottom: 1px solid var(--muted);
-      border-right: 1px solid var(--muted);
-    }
-    .col-head:last-of-type { border-right: none; }
-
-    .text-col,
-    .note-col,
-    .xref-col {
-      padding: 1.5rem 1rem;
+    /* ── Verse body ── */
+    .verse-body {
+      padding: 1.5rem 0;
       font-size: 1.05rem;
       line-height: 1.8;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
     }
-    .text-col { border-right: 1px solid var(--muted); }
-    .note-col { border-right: 1px solid var(--muted); }
-    .note-col ul { padding-left: 2rem; }
-    .note-col ul li { margin-bottom: 1rem; }
-    .xref-col { }
-    .xref-col ul { padding-left: 1.25rem; }
-    .xref-col ul li { margin-bottom: 0.5rem; }
-    .xref-col a, .xref-col a:visited { color: var(--accent); text-decoration: underline; }
 
-    .preface {
-      padding: 1.5rem 1rem;
-      font-size: 1.05rem;
+    /* ── Per-verse entry ── */
+    .verse-entry {
+      display: flex;
+      gap: 1em;
+      align-items: flex-start;
+    }
+
+    .verse-ref {
+      flex-shrink: 0;
+      min-width: 2em;
+      text-align: right;
+      letter-spacing: 0.1em;
+      line-height: 1.8;
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    .verse-content {
+      flex: 1;
+    }
+
+    .verse-text {
+      display: block;
+      border-left: 3px solid var(--accent);
+      padding-left: 1.25rem;
       line-height: 1.8;
     }
-    .preface-heading {
-      font-size: 0.63rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 0.75rem;
+
+    .verse-notes {
+      margin-top: 0.6rem;
+      padding-left: 2.5rem;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #555;
     }
-    .preface ul { padding-left: 2rem; }
-    .preface ul li { margin-bottom: 1rem; }
-    .red { color: #a33; }
-    .blue { color: #5f8ec0; }
-    .green { color: #5a9d6e; }
-    .orange { color: #d4944f; }
+    .verse-notes ul {
+      list-style: disc;
+      padding-left: 1.25rem;
+    }
+    .verse-notes ul li { margin-bottom: 0.75rem; }
+    .verse-notes ul li:last-child { margin-bottom: 0; }
+
+    .verse-notes a,
+    .verse-notes a:visited { color: var(--accent); text-decoration: underline; }
 
     /* ── Patristic quotes ── */
     .patristic-entries {
-      padding: 1.5rem 1rem;
+      padding: 1.5rem 0;
       display: flex;
       flex-direction: column;
       gap: 2.5rem;
@@ -220,21 +206,6 @@
       letter-spacing: 0.06em;
       color: var(--accent);
       padding-left: 1.25rem;
-    }
-
-    .verse-block {
-      display: flex;
-      gap: 1em;
-      margin-bottom: 1.25rem;
-    }
-    .verse-block:last-child { margin-bottom: 0; }
-
-    .verse-ref {
-      flex-shrink: 0;
-      font-size: 1.05rem;
-      letter-spacing: 0.1em;
-      color: var(--accent);
-      font-style: normal;
     }
 
     /* ── Hamburger ── */
@@ -284,10 +255,6 @@
       .sidebar.open { transform: translateX(0); }
       .hamburger { display: flex; }
       main { margin-left: 0; padding: 4rem 1.25rem 4rem; }
-      .verse-grid { grid-template-columns: 1fr; }
-      .col-head { border-right: none; }
-      .text-col { border-right: none; }
-      .note-col { border-right: none; }
     }
   </style>
 </head>
@@ -318,63 +285,31 @@
   <section id="overview" class="section">
     <h2 class="section-heading">Overview</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="col-head">Cross-References</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-      <div class="xref-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="old-testament" class="section">
     <h2 class="section-heading">Old Testament</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="col-head">Cross-References</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-      <div class="xref-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="institution" class="section">
     <h2 class="section-heading">Institution</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="col-head">Cross-References</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-      <div class="xref-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="john-6" class="section">
     <h2 class="section-heading">John 6</h2>
     <hr>
-    <div class="verse-grid" id="john-6-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="col-head">Cross-References</div>
-    </div>
+    <div class="verse-body" id="john-6-body"></div>
   </section>
 
   <section id="pauline" class="section">
     <h2 class="section-heading">Pauline</h2>
     <hr>
-    <div class="verse-grid">
-      <div class="col-head">Text</div>
-      <div class="col-head">Commentary</div>
-      <div class="col-head">Cross-References</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
-      <div class="xref-col"></div>
-    </div>
+    <div class="verse-body"></div>
   </section>
 
   <section id="patristic" class="section">
@@ -401,67 +336,62 @@
   const JOHN6_ANNOTATIONS = [
     {
       start: 53, end: 54,
-      className: 'orange',
-      html: '<ul><li class=”orange”>Clearly a prefigurement of the Last Supper (see Matthew 26:26-28)”</li><li class=”orange”>The blood was considered to carry the life force of an animal. It is a vitalistic religion. Therefore consumption was considered to be partaking in a communion with the animal. As such, consumption of the blood of animals was outlawed (see Genesis 9:3-4) as it was a debasing of self, a communion with a lower kind of being, while the consumption of the blood of God makes sense as we wish to become “partakers of the divine nature” (see 2 Peter 1:4).</li></ul>',
-      xrefs: [
-        { label: 'Matthew 26:26-28', href: 'https://bible.usccb.org/bible/matthew/26' },
-        { label: 'Genesis 9:3–4', href: 'https://bible.usccb.org/bible/genesis/9' },
-        { label: '2 Peter 1:4', href: 'https://bible.usccb.org/bible/2peter/1' }
+      notes: [
+        'Clearly a prefigurement of the Last Supper (see <a href="https://bible.usccb.org/bible/matthew/26" target="_blank" rel="noopener">Matthew 26:26-28</a>)',
+        'The blood was considered to carry the life force of an animal. It is a vitalistic religion. Therefore consumption was considered to be partaking in a communion with the animal. As such, consumption of the blood of animals was outlawed (see <a href="https://bible.usccb.org/bible/genesis/9" target="_blank" rel="noopener">Genesis 9:3–4</a>) as it was a debasing of self, a communion with a lower kind of being, while the consumption of the blood of God makes sense as we wish to become "partakers of the divine nature" (see <a href="https://bible.usccb.org/bible/2peter/1" target="_blank" rel="noopener">2 Peter 1:4</a>).'
       ]
     }
   ];
 
-  function buildAnnotatedGrid(grid, verses, annotations) {
+  function buildAnnotatedBody(container, verses, annotations) {
     const breaks = new Set([verses[0].verse]);
     annotations.forEach(a => { breaks.add(a.start); breaks.add(a.end + 1); });
     const breaksSorted = [...breaks].sort((a, b) => a - b);
     const annMap = {};
     annotations.forEach(a => annMap[a.start] = a);
 
-    let firstRow = true;
     breaksSorted.forEach((breakStart, i) => {
       const breakEnd = i + 1 < breaksSorted.length ? breaksSorted[i + 1] - 1 : Infinity;
       const group = verses.filter(v => v.verse >= breakStart && v.verse <= breakEnd);
       if (!group.length) return;
 
       const ann = annMap[breakStart];
-      const textCol = document.createElement('div');
-      textCol.className = 'text-col';
-      const noteCol = document.createElement('div');
-      noteCol.className = 'note-col';
-      const xrefCol = document.createElement('div');
-      xrefCol.className = 'xref-col';
 
-      if (!firstRow) {
-        textCol.style.borderTop = '1px solid var(--muted)';
-        noteCol.style.borderTop = '1px solid var(--muted)';
-        xrefCol.style.borderTop = '1px solid var(--muted)';
-      }
-      firstRow = false;
-
+      // Each verse gets its own entry; notes attach to the last verse in the group
       group.forEach(({ verse, text }) => {
-        const block = document.createElement('div');
-        block.className = 'verse-block' + (ann ? ` ${ann.className}` : '');
-        block.innerHTML = `<span class=”verse-ref”>${verse}</span>${text}`;
-        textCol.appendChild(block);
-      });
+        const entry = document.createElement('div');
+        entry.className = 'verse-entry';
 
-      if (ann) {
-        if (ann.html) noteCol.innerHTML = ann.html;
-        if (ann.xrefs && ann.xrefs.length) {
+        const refEl = document.createElement('span');
+        refEl.className = 'verse-ref';
+        refEl.textContent = verse;
+        entry.appendChild(refEl);
+
+        const content = document.createElement('div');
+        content.className = 'verse-content';
+
+        const textEl = document.createElement('span');
+        textEl.className = 'verse-text';
+        textEl.innerHTML = text;
+        content.appendChild(textEl);
+
+        const isLastInGroup = verse === group[group.length - 1].verse;
+        if (isLastInGroup && ann?.notes?.length) {
+          const notesEl = document.createElement('div');
+          notesEl.className = 'verse-notes';
           const ul = document.createElement('ul');
-          ann.xrefs.forEach(({ label, href }) => {
+          ann.notes.forEach(html => {
             const li = document.createElement('li');
-            li.innerHTML = `<a href=”${href}” target=”_blank” rel=”noopener”>${label}</a>`;
+            li.innerHTML = html;
             ul.appendChild(li);
           });
-          xrefCol.appendChild(ul);
+          notesEl.appendChild(ul);
+          content.appendChild(notesEl);
         }
-      }
 
-      grid.appendChild(textCol);
-      grid.appendChild(noteCol);
-      grid.appendChild(xrefCol);
+        entry.appendChild(content);
+        container.appendChild(entry);
+      });
     });
   }
 
@@ -469,13 +399,13 @@
   let johnData = null;
 
   async function loadJohn6() {
-    const grid = document.getElementById('john-6-grid');
-    if (grid.querySelector('.text-col')) return;
+    const container = document.getElementById('john-6-body');
+    if (container.querySelector('.verse-entry')) return;
 
     const loadingEl = document.createElement('div');
-    loadingEl.style.cssText = 'grid-column:1/-1;padding:0.85rem 1rem;font-size:0.82rem;font-style:italic;color:var(--muted);';
+    loadingEl.style.cssText = 'padding:0.85rem 0;font-size:0.82rem;font-style:italic;color:var(--muted);';
     loadingEl.textContent = 'Loading…';
-    grid.appendChild(loadingEl);
+    container.appendChild(loadingEl);
 
     try {
       if (!johnData) {
@@ -484,7 +414,7 @@
       }
       const chapter = johnData.chapters.find(c => c.chapter === 6);
       loadingEl.remove();
-      buildAnnotatedGrid(grid, chapter.verses, JOHN6_ANNOTATIONS);
+      buildAnnotatedBody(container, chapter.verses, JOHN6_ANNOTATIONS);
     } catch (err) {
       loadingEl.textContent = 'Could not load verses.';
     }
