@@ -143,10 +143,10 @@
       margin-bottom: 0;
     }
 
-    /* ── Two-column grid ── */
+    /* ── Three-column grid ── */
     .verse-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 0.5fr;
       border: 1px solid var(--muted);
       border-top: none;
     }
@@ -159,18 +159,25 @@
       padding: 0.45rem 1rem;
       border-top: 1px solid var(--muted);
       border-bottom: 1px solid var(--muted);
+      border-right: 1px solid var(--muted);
     }
-    .col-head:first-child { border-right: 1px solid var(--muted); }
+    .col-head:last-of-type { border-right: none; }
 
     .text-col,
-    .note-col {
+    .note-col,
+    .xref-col {
       padding: 1.5rem 1rem;
       font-size: 1.05rem;
       line-height: 1.8;
     }
     .text-col { border-right: 1px solid var(--muted); }
+    .note-col { border-right: 1px solid var(--muted); }
     .note-col ul { padding-left: 2rem; }
     .note-col ul li { margin-bottom: 1rem; }
+    .xref-col { }
+    .xref-col ul { padding-left: 1.25rem; }
+    .xref-col ul li { margin-bottom: 0.5rem; }
+    .xref-col a, .xref-col a:visited { color: var(--accent); text-decoration: underline; }
 
     .preface {
       padding: 1.5rem 1rem;
@@ -278,12 +285,9 @@
       .hamburger { display: flex; }
       main { margin-left: 0; padding: 4rem 1.25rem 4rem; }
       .verse-grid { grid-template-columns: 1fr; }
-      .col-head:first-child { border-right: none; }
+      .col-head { border-right: none; }
       .text-col { border-right: none; }
-      .verse-grid .col-head:nth-child(1) { order: 1; }
-      .verse-grid .text-col { order: 2; }
-      .verse-grid .col-head:nth-child(2) { order: 3; }
-      .verse-grid .note-col { order: 4; }
+      .note-col { border-right: none; }
     }
   </style>
 </head>
@@ -317,8 +321,10 @@
     <div class="verse-grid">
       <div class="col-head">Text</div>
       <div class="col-head">Commentary</div>
+      <div class="col-head">Cross-References</div>
       <div class="text-col"></div>
       <div class="note-col"></div>
+      <div class="xref-col"></div>
     </div>
   </section>
 
@@ -328,8 +334,10 @@
     <div class="verse-grid">
       <div class="col-head">Text</div>
       <div class="col-head">Commentary</div>
+      <div class="col-head">Cross-References</div>
       <div class="text-col"></div>
       <div class="note-col"></div>
+      <div class="xref-col"></div>
     </div>
   </section>
 
@@ -339,19 +347,20 @@
     <div class="verse-grid">
       <div class="col-head">Text</div>
       <div class="col-head">Commentary</div>
+      <div class="col-head">Cross-References</div>
       <div class="text-col"></div>
       <div class="note-col"></div>
+      <div class="xref-col"></div>
     </div>
   </section>
 
   <section id="john-6" class="section">
     <h2 class="section-heading">John 6</h2>
     <hr>
-    <div class="verse-grid">
+    <div class="verse-grid" id="john-6-grid">
       <div class="col-head">Text</div>
       <div class="col-head">Commentary</div>
-      <div class="text-col"></div>
-      <div class="note-col"></div>
+      <div class="col-head">Cross-References</div>
     </div>
   </section>
 
@@ -361,8 +370,10 @@
     <div class="verse-grid">
       <div class="col-head">Text</div>
       <div class="col-head">Commentary</div>
+      <div class="col-head">Cross-References</div>
       <div class="text-col"></div>
       <div class="note-col"></div>
+      <div class="xref-col"></div>
     </div>
   </section>
 
@@ -386,6 +397,99 @@
     cursor.style.top  = e.clientY + 'px';
   });
 
+  // ── John 6 annotations ───────────────────────────────────────────────────
+  const JOHN6_ANNOTATIONS = [
+    {
+      start: 53, end: 54,
+      className: 'orange',
+      html: '<ul><li class=”orange”>Clearly a prefigurement of the Last Supper (see Matthew 26:26-28)”</li><li class=”orange”>The blood was considered to carry the life force of an animal. It is a vitalistic religion. Therefore consumption was considered to be partaking in a communion with the animal. As such, consumption of the blood of animals was outlawed (see Genesis 9:3-4) as it was a debasing of self, a communion with a lower kind of being, while the consumption of the blood of God makes sense as we wish to become “partakers of the divine nature” (see 2 Peter 1:4).</li></ul>',
+      xrefs: [
+        { label: 'Matthew 26:26-28', href: 'https://bible.usccb.org/bible/matthew/26' },
+        { label: 'Genesis 9:3–4', href: 'https://bible.usccb.org/bible/genesis/9' },
+        { label: '2 Peter 1:4', href: 'https://bible.usccb.org/bible/2peter/1' }
+      ]
+    }
+  ];
+
+  function buildAnnotatedGrid(grid, verses, annotations) {
+    const breaks = new Set([verses[0].verse]);
+    annotations.forEach(a => { breaks.add(a.start); breaks.add(a.end + 1); });
+    const breaksSorted = [...breaks].sort((a, b) => a - b);
+    const annMap = {};
+    annotations.forEach(a => annMap[a.start] = a);
+
+    let firstRow = true;
+    breaksSorted.forEach((breakStart, i) => {
+      const breakEnd = i + 1 < breaksSorted.length ? breaksSorted[i + 1] - 1 : Infinity;
+      const group = verses.filter(v => v.verse >= breakStart && v.verse <= breakEnd);
+      if (!group.length) return;
+
+      const ann = annMap[breakStart];
+      const textCol = document.createElement('div');
+      textCol.className = 'text-col';
+      const noteCol = document.createElement('div');
+      noteCol.className = 'note-col';
+      const xrefCol = document.createElement('div');
+      xrefCol.className = 'xref-col';
+
+      if (!firstRow) {
+        textCol.style.borderTop = '1px solid var(--muted)';
+        noteCol.style.borderTop = '1px solid var(--muted)';
+        xrefCol.style.borderTop = '1px solid var(--muted)';
+      }
+      firstRow = false;
+
+      group.forEach(({ verse, text }) => {
+        const block = document.createElement('div');
+        block.className = 'verse-block' + (ann ? ` ${ann.className}` : '');
+        block.innerHTML = `<span class=”verse-ref”>${verse}</span>${text}`;
+        textCol.appendChild(block);
+      });
+
+      if (ann) {
+        if (ann.html) noteCol.innerHTML = ann.html;
+        if (ann.xrefs && ann.xrefs.length) {
+          const ul = document.createElement('ul');
+          ann.xrefs.forEach(({ label, href }) => {
+            const li = document.createElement('li');
+            li.innerHTML = `<a href=”${href}” target=”_blank” rel=”noopener”>${label}</a>`;
+            ul.appendChild(li);
+          });
+          xrefCol.appendChild(ul);
+        }
+      }
+
+      grid.appendChild(textCol);
+      grid.appendChild(noteCol);
+      grid.appendChild(xrefCol);
+    });
+  }
+
+  // ── John 6 loader ─────────────────────────────────────────────────────────
+  let johnData = null;
+
+  async function loadJohn6() {
+    const grid = document.getElementById('john-6-grid');
+    if (grid.querySelector('.text-col')) return;
+
+    const loadingEl = document.createElement('div');
+    loadingEl.style.cssText = 'grid-column:1/-1;padding:0.85rem 1rem;font-size:0.82rem;font-style:italic;color:var(--muted);';
+    loadingEl.textContent = 'Loading…';
+    grid.appendChild(loadingEl);
+
+    try {
+      if (!johnData) {
+        const res = await fetch('./data/john.json');
+        johnData = await res.json();
+      }
+      const chapter = johnData.chapters.find(c => c.chapter === 6);
+      loadingEl.remove();
+      buildAnnotatedGrid(grid, chapter.verses, JOHN6_ANNOTATIONS);
+    } catch (err) {
+      loadingEl.textContent = 'Could not load verses.';
+    }
+  }
+
   // ── Section switching ─────────────────────────────────────────────────────
   const links    = document.querySelectorAll('.sidebar a[href^="#"]');
   const sections = document.querySelectorAll('.section');
@@ -394,6 +498,7 @@
     sections.forEach(s => s.classList.toggle('active', s.id === id));
     links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === `#${id}`));
     history.replaceState(null, '', `#${id}`);
+    if (id === 'john-6') loadJohn6();
   }
 
   links.forEach(l => {
