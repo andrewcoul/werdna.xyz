@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eucharist — Bible Studies</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Forum&display=swap">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    * { cursor: none !important; }
+    #cursor { position: fixed; width: 16px; height: 16px; background: rgba(0,0,0,0.4); border-radius: 50%; pointer-events: none; transform: translate(-50%,-50%); z-index: 9999; }
+    @media (pointer: coarse) { #cursor { display: none; } * { cursor: auto !important; } }
+
+    :root {
+      --fg: #1a1a1a;
+      --muted: #c8c2b4;
+      --accent: #8b1a1a;
+      --sidebar: 260px;
+      --bg: #8b1a1a;
+    }
+
+    a:visited { color: inherit; }
+
+    body {
+      font-family: 'Forum', Georgia, serif;
+      background: #fff;
+      color: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar);
+      height: 100vh;
+      overflow-y: auto;
+      background: var(--bg);
+      border-right: 2px solid #000;
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar .back {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: #fff;
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+      margin-bottom: 1.25rem;
+    }
+    .sidebar .back:hover { opacity: 1; }
+
+    .sidebar .book-title {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 0.75rem;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .sidebar li { position: relative; }
+
+    .sidebar a {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: #fff;
+      text-decoration: none;
+      display: block;
+      padding: 0.15rem 0;
+      opacity: 0.4;
+      transition: opacity 0.15s;
+    }
+    .sidebar a:hover { opacity: 0.7; }
+    .sidebar a::before {
+      content: '>';
+      position: absolute;
+      left: -1rem;
+      opacity: 0;
+    }
+    .sidebar a.active { opacity: 1; }
+    .sidebar a.active::before { opacity: 1; }
+
+    /* ── Main ── */
+    main {
+      margin-left: var(--sidebar);
+      padding: 3rem 3rem 6rem;
+      flex: 1;
+      max-width: 1100px;
+    }
+
+    .page-title {
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.4rem;
+    }
+    .page-subtitle {
+      font-size: 0.9rem;
+      font-style: italic;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .resources-link,
+    .resources-link:visited {
+      font-size: 1.25rem;
+      color: var(--accent);
+      text-decoration: underline;
+      display: inline-block;
+      margin-bottom: 3rem;
+    }
+
+    /* ── Topic sections ── */
+    .section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 2rem;
+    }
+
+    .section-heading {
+      font-size: 1.4rem;
+      letter-spacing: 0.04em;
+      color: var(--fg);
+      margin-bottom: 0.4rem;
+    }
+
+    .section > hr {
+      border: none;
+      border-top: 1px solid var(--muted);
+      margin-bottom: 0;
+    }
+
+    /* ── Two-column grid ── */
+    .verse-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--muted);
+      border-top: none;
+    }
+
+    .col-head {
+      font-size: 0.63rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0.45rem 1rem;
+      border-top: 1px solid var(--muted);
+      border-bottom: 1px solid var(--muted);
+    }
+    .col-head:first-child { border-right: 1px solid var(--muted); }
+
+    .text-col,
+    .note-col {
+      padding: 1.5rem 1rem;
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+    .text-col { border-right: 1px solid var(--muted); }
+    .note-col ul { padding-left: 2rem; }
+    .note-col ul li { margin-bottom: 1rem; }
+
+    .preface {
+      padding: 1.5rem 1rem;
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+    .preface-heading {
+      font-size: 0.63rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+    .preface ul { padding-left: 2rem; }
+    .preface ul li { margin-bottom: 1rem; }
+    .red { color: #a33; }
+    .blue { color: #5f8ec0; }
+    .green { color: #5a9d6e; }
+    .orange { color: #d4944f; }
+
+    /* ── Patristic quotes ── */
+    .patristic-entries {
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .patristic-quote {
+      font-size: 1.05rem;
+      line-height: 1.9;
+      font-style: italic;
+      border-left: 3px solid var(--accent);
+      padding-left: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .patristic-attribution {
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      padding-left: 1.25rem;
+    }
+
+    .verse-block {
+      display: flex;
+      gap: 1em;
+      margin-bottom: 1.25rem;
+    }
+    .verse-block:last-child { margin-bottom: 0; }
+
+    .verse-ref {
+      flex-shrink: 0;
+      font-size: 1.05rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    /* ── Hamburger ── */
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      flex-direction: column;
+      gap: 6px;
+      position: fixed;
+      top: 1.25rem;
+      left: 1.25rem;
+      z-index: 101;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: #1a1a1a;
+      transition: transform 0.25s, opacity 0.25s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    .nav-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 99;
+    }
+    .nav-overlay.open { display: block; }
+
+    /* ── Section visibility ── */
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ── Responsive ── */
+    @media (max-width: 700px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        z-index: 100;
+      }
+      .sidebar.open { transform: translateX(0); }
+      .hamburger { display: flex; }
+      main { margin-left: 0; padding: 4rem 1.25rem 4rem; }
+      .verse-grid { grid-template-columns: 1fr; }
+      .col-head:first-child { border-right: none; }
+      .text-col { border-right: none; }
+      .verse-grid .col-head:nth-child(1) { order: 1; }
+      .verse-grid .text-col { order: 2; }
+      .verse-grid .col-head:nth-child(2) { order: 3; }
+      .verse-grid .note-col { order: 4; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<button class="hamburger" aria-label="Toggle navigation">
+  <span></span><span></span><span></span>
+</button>
+<div class="nav-overlay"></div>
+
+<nav class="sidebar">
+  <a href="index.html" class="back">← Studies</a>
+  <ul>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#old-testament">Old Testament</a></li>
+    <li><a href="#institution">Institution</a></li>
+    <li><a href="#john-6">John 6</a></li>
+    <li><a href="#pauline">Pauline</a></li>
+    <li><a href="#patristic">Patristic</a></li>
+  </ul>
+</nav>
+
+<main>
+  <h1 class="page-title">Eucharist</h1>
+  <p><a class="resources-link" href="https://drive.google.com/drive/folders/1fGzm3Rd6j4aQsLZnTQlfjQY_wwXra5Fe?usp=sharing" target="_blank" rel="noopener">CLICK HERE FOR RESOURCES</a></p>
+
+  <section id="overview" class="section">
+    <h2 class="section-heading">Overview</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="old-testament" class="section">
+    <h2 class="section-heading">Old Testament</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="institution" class="section">
+    <h2 class="section-heading">Institution</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="john-6" class="section">
+    <h2 class="section-heading">John 6</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="pauline" class="section">
+    <h2 class="section-heading">Pauline</h2>
+    <hr>
+    <div class="verse-grid">
+      <div class="col-head">Text</div>
+      <div class="col-head">Commentary</div>
+      <div class="text-col"></div>
+      <div class="note-col"></div>
+    </div>
+  </section>
+
+  <section id="patristic" class="section">
+    <h2 class="section-heading">Patristic</h2>
+    <hr>
+    <div class="patristic-entries">
+      <div class="patristic-entry">
+        <blockquote class="patristic-quote">"Having learned these things, and been fully assured that the seeming bread is not bread, though sensible to taste, but the Body of Christ; and that the seeming wine is not wine, though the taste will have it so, but the Blood of Christ; and that of this David sung of old, saying, And bread strengthens man's heart, to make his face to shine with oil, "strengthen your heart," by partaking thereof as spiritual, and "make the face of your soul to shine." And so having it unveiled with a pure conscience, may you reflect as a mirror the glory of the Lord (2 Corinthians 3:18), and proceed from glory to glory, in Christ Jesus our Lord:— To whom be honour, and might, and glory, for ever and ever. Amen"</blockquote>
+        <p class="patristic-attribution">— St. Cyril of Jerusalem, Catechetical Lecture 22:9 (c. 350 AD)</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  // ── Cursor ────────────────────────────────────────────────────────────────
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+  });
+
+  // ── Section switching ─────────────────────────────────────────────────────
+  const links    = document.querySelectorAll('.sidebar a[href^="#"]');
+  const sections = document.querySelectorAll('.section');
+
+  function showSection(id) {
+    sections.forEach(s => s.classList.toggle('active', s.id === id));
+    links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === `#${id}`));
+    history.replaceState(null, '', `#${id}`);
+  }
+
+  links.forEach(l => {
+    l.addEventListener('click', e => {
+      e.preventDefault();
+      showSection(l.getAttribute('href').slice(1));
+      hamburger.classList.remove('open');
+      overlay.classList.remove('open');
+      sidebar.classList.remove('open');
+    });
+  });
+
+  const initial = location.hash.slice(1);
+  showSection(document.getElementById(initial) ? initial : 'overview');
+
+  // ── Hamburger ─────────────────────────────────────────────────────────────
+  const hamburger = document.querySelector('.hamburger');
+  const overlay   = document.querySelector('.nav-overlay');
+  const sidebar   = document.querySelector('.sidebar');
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    overlay.classList.toggle('open');
+    sidebar.classList.toggle('open');
+  });
+  overlay.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    overlay.classList.remove('open');
+    sidebar.classList.remove('open');
+  });
+</script>
+
+</body>
+</html>
