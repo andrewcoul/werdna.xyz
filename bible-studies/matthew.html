@@ -4,57 +4,77 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Matthew — Bible Studies</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Domine:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Domine:wght@400;500;600;700&display=swap">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    * { cursor: none !important; }
-    #cursor { position: fixed; width: 16px; height: 16px; background: rgba(0,0,0,0.4); border-radius: 50%; pointer-events: none; transform: translate(-50%,-50%); z-index: 9999; }
-    @media (pointer: coarse) { #cursor { display: none; } * { cursor: auto !important; } }
 
     :root {
-      --fg: #1a1a1a;
+      --ink: #1c1814;
+      --ink-soft: #6b655c;
+      --paper: #faf8f4;
+      --hairline: #e6e0d5;
       --muted: #c8c2b4;
-      --accent: #8b5e3c;
-      --sidebar: 260px;
-      --bg: #c87840;
+      --accent: #a25e2e;          /* warm ochre — Matthew identity */
+      --accent-ink: #7a4a28;      /* accent for text on paper (≥4.5:1) */
+      --fg: #ffffff;
+      --fg-soft: rgba(255, 255, 255, 0.72);
+      --sidebar: 268px;
+      --measure: 50rem;
+      --ease: cubic-bezier(0.2, 0.6, 0.2, 1);
     }
 
-    a:visited { color: inherit; }
+    /* ── Cursor ── */
+    * { cursor: none !important; }
+    #cursor {
+      position: fixed; top: 0; left: 0;
+      width: 14px; height: 14px; margin: -7px 0 0 -7px;
+      background: rgba(0,0,0,0.28); border: 1px solid rgba(0,0,0,0.32);
+      border-radius: 50%; pointer-events: none; z-index: 9999;
+      transition: width .18s var(--ease), height .18s var(--ease),
+                  margin .18s var(--ease), background .18s var(--ease);
+    }
+    #cursor.is-hover { width: 30px; height: 30px; margin: -15px 0 0 -15px; background: rgba(0,0,0,0.12); }
+    @media (pointer: coarse) { #cursor { display: none; } * { cursor: auto !important; } }
+
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    a, a:visited { color: inherit; }
+    :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; border-radius: 2px; }
 
     body {
-      font-family: 'Domine', Georgia, serif;
-      background: #fff;
-      color: #1a1a1a;
-      min-height: 100vh;
+      font-family: 'Domine', Georgia, 'Times New Roman', serif;
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 100svh;
       display: flex;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
     }
 
     /* ── Sidebar ── */
     .sidebar {
       position: fixed;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       width: var(--sidebar);
       height: 100vh;
       overflow-y: auto;
-      background: var(--bg);
-      border-right: 2px solid #000;
-      padding: 3rem;
+      background: var(--bg, var(--accent));
+      border-right: 2px solid rgba(0,0,0,0.32);
+      padding: 3rem 2rem;
       display: flex;
       flex-direction: column;
     }
-
     .sidebar .back {
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      color: #fff;
+      font-size: 0.92rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--fg);
       text-decoration: none;
-      opacity: 0.7;
-      transition: opacity 0.15s;
-      margin-bottom: 1.25rem;
+      opacity: 0.8;
+      transition: opacity 0.15s var(--ease), transform 0.15s var(--ease);
+      margin-bottom: 1.75rem;
     }
-    .sidebar .back:hover { opacity: 1; }
+    .sidebar .back:hover,
+    .sidebar .back:focus-visible { opacity: 1; transform: translateX(-2px); }
 
     .sidebar ul {
       list-style: none;
@@ -62,179 +82,217 @@
       flex-direction: column;
       gap: 0.1rem;
     }
-
     .sidebar li { position: relative; }
-
-    .sidebar a {
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      color: #fff;
-      text-decoration: none;
+    .sidebar ul a {
+      position: relative;
       display: block;
-      padding: 0.15rem 0;
-      opacity: 0.4;
-      transition: opacity 0.15s;
+      font-size: 0.98rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--fg);
+      text-decoration: none;
+      padding: 0.2rem 0;
+      opacity: 0.62;
+      transition: opacity 0.15s var(--ease), transform 0.15s var(--ease);
     }
-    .sidebar a:hover { opacity: 0.7; }
-    .sidebar a::before {
-      content: '>';
+    .sidebar ul a:hover,
+    .sidebar ul a:focus-visible { opacity: 0.9; transform: translateX(3px); }
+    .sidebar ul a::before {
+      content: '\203A';
       position: absolute;
       left: -1rem;
       opacity: 0;
+      transition: opacity 0.15s var(--ease);
     }
-    .sidebar a.active { opacity: 1; }
-    .sidebar a.active::before { opacity: 1; }
+    .sidebar ul a.active { opacity: 1; }
+    .sidebar ul a.active::before { opacity: 1; }
 
     /* ── Main ── */
     main {
       margin-left: var(--sidebar);
       padding: 3rem 3rem 6rem;
       flex: 1;
-      max-width: 800px;
+      max-width: var(--measure);
     }
-
     .page-title {
-      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
       font-weight: 700;
-      letter-spacing: -0.03em;
-      margin-bottom: 0.4rem;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      margin-bottom: 0.5rem;
     }
-
     .resources-link,
     .resources-link:visited {
-      font-size: 1.25rem;
-      color: var(--accent);
-      text-decoration: underline;
-      display: inline-block;
-      margin-bottom: 3rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-ink);
+      text-decoration: none;
+      border-bottom: 1px solid currentColor;
+      padding-bottom: 2px;
+      margin-bottom: 3.5rem;
+      transition: opacity 0.18s var(--ease);
     }
+    .resources-link:hover,
+    .resources-link:focus-visible { opacity: 0.65; }
 
     /* ── Chapter sections ── */
-    .chapter {
-      margin-bottom: 4rem;
-      scroll-margin-top: 2rem;
-    }
-
+    .chapter { margin-bottom: 4rem; scroll-margin-top: 2rem; display: none; }
+    .chapter.active { display: block; }
     .chapter-heading {
-      font-size: 1.4rem;
-      letter-spacing: 0.04em;
-      color: var(--fg);
-      margin-bottom: 0.4rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
     }
-
     .chapter > hr {
       border: none;
-      border-top: 1px solid var(--muted);
+      border-top: 1px solid var(--hairline);
       margin-bottom: 0;
     }
+
+    /* ── Intro prose ── */
+    .intro-body {
+      padding: 1.5rem 0;
+      font-size: 1.075rem;
+      line-height: 1.8;
+      max-width: 42rem;
+    }
+    .intro-body p { margin-bottom: 1.4rem; }
+    .intro-body p:last-child { margin-bottom: 0; }
+    .intro-subheading {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin: 2rem 0 0.6rem;
+    }
+    .intro-body ul {
+      list-style: disc;
+      padding-left: 1.4rem;
+      margin-bottom: 1.4rem;
+    }
+    .intro-body li { margin-bottom: 0.5rem; }
+    .intro-body li:last-child { margin-bottom: 0; }
+    .intro-body a,
+    .intro-body a:visited { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 2px; }
 
     /* ── Verse body ── */
     .verse-body {
       padding: 1.5rem 0;
-      font-size: 1.05rem;
+      font-size: 1.075rem;
       line-height: 1.8;
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 1.6rem;
     }
-
-    /* ── Per-verse entry (matches patristic sidebar style) ── */
-    .verse-entry {
-      display: flex;
-      gap: 1em;
-      align-items: flex-start;
-    }
-
+    .verse-entry { display: flex; gap: 1em; align-items: flex-start; }
     .verse-ref {
       flex-shrink: 0;
       min-width: 2em;
       text-align: right;
-      letter-spacing: 0.1em;
-      line-height: 1.8;
-      color: var(--accent);
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      line-height: 2.1;
+      color: var(--accent-ink);
+      font-variant-numeric: tabular-nums;
     }
-
-    .verse-content {
-      flex: 1;
-    }
-
+    .verse-content { flex: 1; min-width: 0; }
     .verse-text {
       display: block;
       border-left: 3px solid var(--accent);
       padding-left: 1.25rem;
       line-height: 1.8;
     }
-
     .verse-notes {
-      margin-top: 0.6rem;
-      padding-left: 2.5rem;
-      font-size: 1.05rem;
-      line-height: 1.8;
-      color: #555;
+      margin-top: 0.7rem;
+      padding-left: 1.6rem;
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--ink-soft);
     }
-    .verse-notes ul {
-      list-style: disc;
-      padding-left: 1.25rem;
-    }
+    .verse-notes ul { list-style: disc; padding-left: 1.2rem; }
     .verse-notes ul li { margin-bottom: 0.75rem; }
     .verse-notes ul li:last-child { margin-bottom: 0; }
+    .verse-notes a,
+    .verse-notes a:visited { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 2px; }
 
     /* ── Hamburger ── */
     .hamburger {
       display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
       flex-direction: column;
-      gap: 6px;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
       position: fixed;
-      top: 1.25rem;
-      left: 1.25rem;
+      top: 1rem; left: 1rem;
       z-index: 101;
+      width: 44px; height: 44px;
+      padding: 0;
+      background: var(--paper);
+      border: 1px solid var(--muted);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
     .hamburger span {
       display: block;
-      width: 22px;
-      height: 2px;
-      background: #1a1a1a;
-      transition: transform 0.25s, opacity 0.25s;
+      width: 20px; height: 2px;
+      background: var(--ink);
+      transition: transform 0.25s var(--ease), opacity 0.25s var(--ease);
     }
-    .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     .hamburger.open span:nth-child(2) { opacity: 0; }
-    .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
     .nav-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.35);
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(2px);
       z-index: 99;
     }
     .nav-overlay.open { display: block; }
 
-    /* ── Chapter visibility ── */
-    .chapter { display: none; }
-    .chapter.active { display: block; }
-
     /* ── Responsive ── */
     @media (max-width: 700px) {
+      body { display: block; }
       .sidebar {
+        width: min(80vw, 300px);
         transform: translateX(-100%);
-        transition: transform 0.25s ease;
+        transition: transform 0.28s var(--ease);
         z-index: 100;
       }
       .sidebar.open { transform: translateX(0); }
       .hamburger { display: flex; }
-      main { margin-left: 0; padding: 4rem 1.25rem 4rem; }
+      main { margin-left: 0; width: 100%; max-width: 100%; padding: 4.5rem 1.5rem 4rem; }
+      .chapter { scroll-margin-top: 4.5rem; }
+      .verse-text, .verse-notes { overflow-wrap: break-word; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
     }
   </style>
 </head>
 <body>
 
+<div id="cursor"></div>
+<button class="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
+<div class="nav-overlay"></div>
+
 <nav class="sidebar">
   <a href="index.html" class="back">← Studies</a>
   <ul>
+    <li><a href="#intro">Intro</a></li>
     <li><a href="#ch-1">Ch. 1</a></li>
     <li><a href="#ch-2">Ch. 2</a></li>
     <li><a href="#ch-3">Ch. 3</a></li>
@@ -268,7 +326,23 @@
 
 <main>
   <h1 class="page-title">Matthew</h1>
-  <p><a class="resources-link" href="https://drive.google.com/drive/folders/1fGzm3Rd6j4aQsLZnTQlfjQY_wwXra5Fe?usp=sharing" target="_blank" rel="noopener">CLICK HERE FOR RESOURCES</a></p>
+  <p><a class="resources-link" href="https://drive.google.com/drive/folders/1fGzm3Rd6j4aQsLZnTQlfjQY_wwXra5Fe?usp=sharing" target="_blank" rel="noopener">Resources <span aria-hidden="true">&#8599;</span></a></p>
+
+  <section id="intro" class="chapter">
+    <h2 class="chapter-heading">Introduction</h2>
+    <hr>
+    <div class="intro-body">
+      <h3 class="intro-subheading">Author</h3>
+
+      <h3 class="intro-subheading">Date &amp; Audience</h3>
+
+      <h3 class="intro-subheading">Typologies</h3>
+
+      <h3 class="intro-subheading">Major Themes</h3>
+
+      <h3 class="intro-subheading">Structure</h3>
+    </div>
+  </section>
 
   <section id="ch-1" class="chapter">
     <h2 class="chapter-heading">Chapter 1</h2>
@@ -462,14 +536,21 @@
 </main>
 
 <script>
-  // ── Cursor ────────────────────────────────────────────────────────────────
-  const cursor = document.getElementById('cursor');
-  document.addEventListener('mousemove', e => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top  = e.clientY + 'px';
-  });
+  // ── Cursor ──────────────────────────────────────────────────────────────
+  (function () {
+    const cursor = document.getElementById('cursor');
+    if (!cursor || window.matchMedia('(pointer: coarse)').matches) return;
+    cursor.style.opacity = '0';
+    addEventListener('mousemove', e => {
+      cursor.style.opacity = '1';
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    });
+    addEventListener('mouseover', e => { if (e.target.closest('a, button, [role="button"]')) cursor.classList.add('is-hover'); });
+    addEventListener('mouseout',  e => { if (e.target.closest('a, button, [role="button"]')) cursor.classList.remove('is-hover'); });
+  })();
 
-  // ── Data ──────────────────────────────────────────────────────────────────
+  // ── Data ────────────────────────────────────────────────────────────────
   let bookData = null;
 
   async function loadBook() {
@@ -534,12 +615,13 @@
 
     const section   = document.getElementById(id);
     const verseBody = section.querySelector('.verse-body');
-    if (verseBody.querySelector('.verse-entry')) return;
+    // Static sections (e.g. the intro) have no .verse-body — nothing to fetch.
+    if (!verseBody || verseBody.querySelector('.verse-entry')) return;
 
     const chNum = parseInt(id.replace('ch-', ''), 10);
 
     const loadingEl = document.createElement('div');
-    loadingEl.style.cssText = 'padding:0.85rem 0;font-size:0.82rem;font-style:italic;color:var(--muted);';
+    loadingEl.style.cssText = 'padding:0.85rem 0;font-size:0.82rem;font-style:italic;color:var(--ink-soft);';
     loadingEl.textContent = 'Loading…';
     verseBody.appendChild(loadingEl);
 
@@ -556,13 +638,34 @@
     l.addEventListener('click', e => {
       e.preventDefault();
       showChapter(l.getAttribute('href').slice(1));
+      closeNav();
     });
   });
 
   const initial = location.hash.slice(1);
-  showChapter(document.getElementById(initial) ? initial : 'ch-1');
+  showChapter(document.getElementById(initial) ? initial : 'intro');
+
+  // ── Hamburger ───────────────────────────────────────────────────────────
+  const hamburger = document.querySelector('.hamburger');
+  const overlay   = document.querySelector('.nav-overlay');
+  const sidebar   = document.querySelector('.sidebar');
+
+  function closeNav() {
+    hamburger.classList.remove('open');
+    overlay.classList.remove('open');
+    sidebar.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+  }
+
+  hamburger.addEventListener('click', () => {
+    const open = hamburger.classList.toggle('open');
+    overlay.classList.toggle('open', open);
+    sidebar.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', String(open));
+  });
+  overlay.addEventListener('click', closeNav);
+  addEventListener('keydown', e => { if (e.key === 'Escape') closeNav(); });
 </script>
 
-<script src="../nav.js"></script>
 </body>
 </html>
